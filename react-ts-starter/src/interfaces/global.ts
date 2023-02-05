@@ -5,10 +5,13 @@ export interface BtnProps {
 }
 
 export interface StepperProps {
+  activeStep: number;
+  setActiveStep: (step: number | any) => void;
   userData: userInfo;
   setUserData: (user: userInfo) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  checkValidation: () => boolean;
+  isValidForm: boolean;
+  setValidation: (validation: boolean) => void;
   resetForm: () => void;
 }
 
@@ -16,6 +19,8 @@ export interface FormProps {
   userData: userInfo;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   resetForm: () => void;
+  setValidation: (validation: boolean) => void;
+  isValidForm: boolean;
 }
 
 export interface userInfo {

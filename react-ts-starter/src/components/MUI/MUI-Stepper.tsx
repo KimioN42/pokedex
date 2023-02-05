@@ -9,11 +9,11 @@ import { StepperProps } from "../../interfaces/global";
 import UserForm from "../UserForm";
 import Pokedex from "../../pages/Pokedex";
 import { Container } from "@mui/material";
+import { ToastContainer } from "react-toastify";
 
 const steps = ["Your Information", "Select your Pokemon", "Review"];
 
 export default function HorizontalLinearStepper(stepperProps: StepperProps) {
-  const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
 
   const isStepOptional = (step: number) => {
@@ -25,9 +25,9 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
   };
 
   const handleNext = () => {
-    if (activeStep === 0) {
-      if (stepperProps.checkValidation()) {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (stepperProps.activeStep === 0) {
+      if (stepperProps.isValidForm) {
+        stepperProps.setActiveStep((prevActiveStep: any) => prevActiveStep + 1);
       } else {
         alert("Please fill out all fields");
       }
@@ -35,42 +35,27 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
     }
 
     let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
+    if (isStepSkipped(stepperProps.activeStep)) {
       newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
+      newSkipped.delete(stepperProps.activeStep);
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    stepperProps.setActiveStep((prevActiveStep: any) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
+    stepperProps.setActiveStep((prevActiveStep: any) => prevActiveStep - 1);
   };
 
   const handleReset = () => {
-    setActiveStep(0);
+    stepperProps.setActiveStep(0);
     stepperProps?.resetForm();
   };
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={stepperProps.activeStep}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {};
           const labelProps: {
@@ -91,7 +76,7 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
           );
         })}
       </Stepper>
-      {activeStep === steps.length ? (
+      {stepperProps.activeStep === steps.length ? (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
             All steps completed - you're finished
@@ -103,28 +88,39 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          {/* Step 1 */}
-          {activeStep === 0 && (
+          {/* Step 1 - User Info*/}
+          {stepperProps.activeStep === 0 && (
             <Container maxWidth="xl">
               <UserForm
                 userData={stepperProps.userData}
                 handleChange={stepperProps.handleChange}
                 resetForm={stepperProps.resetForm}
+                setValidation={stepperProps.setValidation}
+                isValidForm={stepperProps.isValidForm}
               />
             </Container>
           )}
 
-          {/* Step 2 */}
-          {activeStep === 1 && (
+          {/* Step 2 - Pokedex */}
+          {stepperProps.activeStep === 1 && (
             <Container maxWidth="xl">
               <Pokedex />
+            </Container>
+          )}
+
+          {/* Step 3 - Review */}
+          {stepperProps.activeStep === 2 && (
+            <Container maxWidth="xl">
+              <Typography sx={{ mt: 2, mb: 1 }}>
+                Review your information and submit
+              </Typography>
             </Container>
           )}
 
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
-              disabled={activeStep === 0}
+              disabled={stepperProps.activeStep === 0}
               onClick={handleBack}
               sx={{ mr: 1 }}
             >
@@ -133,12 +129,27 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
 
             <Box sx={{ flex: "1 1 auto" }} />
 
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            <Button
+              onClick={handleNext}
+              disabled={stepperProps.isValidForm === false}
+            >
+              {stepperProps.activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>
           </Box>
         </React.Fragment>
       )}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </Box>
   );
 }

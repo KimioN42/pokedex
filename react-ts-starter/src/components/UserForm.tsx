@@ -4,32 +4,82 @@ import { formStyle } from "../utils/styling";
 import { saveData } from "../utils/helper";
 import { userInfo } from "../interfaces/global";
 import { FormProps } from "../interfaces/global";
-import { Box, Button, FormLabel, Input, Typography } from "@mui/material";
-import Form from "antd/es/form/Form";
+import { Alert, Box, Button, FormLabel, Input } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const UserForm = ({ userData, handleChange, resetForm }: FormProps) => {
+const UserForm = ({
+  userData,
+  handleChange,
+  resetForm,
+  isValidForm,
+  setValidation,
+}: FormProps) => {
   const phoneRGEX = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
 
   const handleValidation = (event: any) => {
-    event.preventDefault();
+    const inputs = document.getElementsByTagName("input");
+
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i].value === "") {
+        toast.warn("You have to fill out all the fields first :)", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        inputs[i].focus();
+        return;
+      }
+    }
+
     if (!phoneRGEX.test(userData.phoneNumber)) {
-      alert("Invalid Phone Number");
+      toast.error("Phone number is not in the correct format", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
     } else {
       const userInfo: userInfo = {
-        firstName: event.target[0].value,
-        lastName: event.target[1].value,
-        email: event.target[2].value,
-        phoneNumber: event.target[3].value,
-        address: event.target[4].value,
+        firstName: inputs[0].value,
+        lastName: inputs[1].value,
+        email: inputs[2].value,
+        phoneNumber: inputs[3].value,
+        address: inputs[4].value,
       };
       saveData("userInfo", JSON.stringify(userInfo));
       console.log("User Info: ", userInfo);
+      setValidation(true);
+
+      toast.success(
+        "All good, you're allowed to continue and select your favorite Pokemon!",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
     }
   };
 
   return (
     <div style={formStyle.form}>
-      <Form>
+      <form>
         <FormLabel>
           First Name
           <Input
@@ -40,6 +90,7 @@ const UserForm = ({ userData, handleChange, resetForm }: FormProps) => {
             onChange={(event: any) => handleChange(event)}
             placeholder="First Name"
             required
+            disabled={isValidForm}
           />
         </FormLabel>
         <br />
@@ -53,6 +104,7 @@ const UserForm = ({ userData, handleChange, resetForm }: FormProps) => {
             onChange={(event: any) => handleChange(event)}
             placeholder="Last Name"
             required
+            disabled={isValidForm}
           />
         </FormLabel>
         <br />
@@ -66,6 +118,7 @@ const UserForm = ({ userData, handleChange, resetForm }: FormProps) => {
             onChange={(event: any) => handleChange(event)}
             placeholder="johndoe@email.com"
             required={true}
+            disabled={isValidForm}
           />
         </FormLabel>
         <br />
@@ -79,6 +132,7 @@ const UserForm = ({ userData, handleChange, resetForm }: FormProps) => {
             onChange={(event: any) => handleChange(event)}
             placeholder="(XXX) XXX-XXXX"
             required
+            disabled={isValidForm}
           />
         </FormLabel>
         <br />
@@ -92,6 +146,7 @@ const UserForm = ({ userData, handleChange, resetForm }: FormProps) => {
             placeholder="Address"
             required={true}
             fullWidth
+            disabled={isValidForm}
           />
         </FormLabel>
         <br />
@@ -103,12 +158,12 @@ const UserForm = ({ userData, handleChange, resetForm }: FormProps) => {
             justifyContent: "space-between",
           }}
         >
-          <Button onClick={resetForm}>Clear Form</Button>
-          <Button type="submit" onClick={handleValidation}>
-            Validate
+          <Button onClick={resetForm}>
+            {isValidForm ? "Edit" : "Clear Form"}
           </Button>
+          <Button onClick={handleValidation}>Validate</Button>
         </Box>
-      </Form>
+      </form>
     </div>
   );
 };
