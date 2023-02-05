@@ -1,17 +1,10 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import PokeChoice from "./pages/PokeChoice";
-import PokeHeader from "./components/PokeHeader";
+import AppRouter from "./router/AppRouter";
 
 function App() {
   return (
     <div className="App">
-      <PokeHeader />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="pickYourPokemon" element={<PokeChoice />} />
-      </Routes>
+      <AppRouter />
     </div>
   );
 }

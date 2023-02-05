@@ -18,8 +18,8 @@ export const formStyle = {
     alignItems: "center",
     justifyContent: "center",
     border: "1px solid #333",
-    backgroundColor: "#333",
-    color: "#fff",
+    backgroundColor: "#fff",
+    color: "#333",
     borderRadius: "5px",
     padding: "20px",
     margin: "20px",
@@ -29,7 +29,7 @@ export const formStyle = {
     padding: "10px",
     margin: "10px",
     borderRadius: "5px",
-    border: "none",
+    border: "0.5px solid #333",
     outline: "none",
   },
   formSubmit: {
@@ -92,6 +92,28 @@ export const cardStyle = {
     margin: "0",
   },
   card__content: {
+    fontSize: "18px",
+    margin: "0",
+  },
+};
+
+export const StepperStyle = {
+  stepper: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "1px solid #333",
+    backgroundColor: "#FFF",
+    color: "#333",
+    borderRadius: "5px",
+    padding: "20px",
+    margin: "20px",
+  },
+  stepper__title: {
+    fontSize: "24px",
+    margin: "0",
+  },
+  stepper__content: {
     fontSize: "18px",
     margin: "0",
   },
