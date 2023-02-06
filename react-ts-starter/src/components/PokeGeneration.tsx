@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { MenuItem, Select, Typography } from "@mui/material";
 import React from "react";
-import { saveData } from "../utils/helper";
 
 type GenerationProps = {
   generation: number;
@@ -10,7 +10,6 @@ type GenerationProps = {
 
 export default function PokeGeneration(props: GenerationProps) {
   const handleGenerationChange = (event: any) => {
-    saveData("generation", event.target.value);
     props.setGeneration(event.target.value);
     props.setLoading(true);
   };
@@ -20,11 +19,7 @@ export default function PokeGeneration(props: GenerationProps) {
       <Typography variant="h5" sx={{ marginBottom: "0.5em" }}>
         Generation
       </Typography>
-      <Select
-        fullWidth
-        onChange={handleGenerationChange}
-        defaultValue={props.generation ? props.generation : 1}
-      >
+      <Select fullWidth onChange={handleGenerationChange} defaultValue={1}>
         <MenuItem value={1}>Generation 1</MenuItem>
         <MenuItem value={2}>Generation 2</MenuItem>
         <MenuItem value={3}>Generation 3</MenuItem>

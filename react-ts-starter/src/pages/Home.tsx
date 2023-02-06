@@ -1,4 +1,4 @@
-import { Pokemon, userInfo } from "../interfaces/global";
+import { userInfo } from "../interfaces/global";
 import { useState, useEffect } from "react";
 import HorizontalLinearStepper from "../components/HorizontalStepper";
 import { StepperStyle } from "../utils/styling";
@@ -12,7 +12,6 @@ function Home() {
     phoneNumber: "",
     address: "",
   } as userInfo);
-  const [pokemon, setPokemon] = useState<Pokemon>({} as Pokemon);
   const [step, setStep] = useState(0);
   const [formValidated, setFormValidated] = useState(false);
 
@@ -21,10 +20,6 @@ function Home() {
     const userData = localStorage.getItem("userInfo");
     if (userData) {
       setUser(JSON.parse(userData));
-    }
-    const pokemonData = localStorage.getItem("pokemon");
-    if (pokemonData) {
-      setPokemon(JSON.parse(pokemonData));
     }
     const step = localStorage.getItem("step");
     if (step) {

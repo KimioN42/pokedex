@@ -23,8 +23,8 @@ export const getPokemonGenerations = (gen: number) => {
     case 8:
       return { start: 810, finish: 905 };
     case 9:
-      return { start: 906, finish: 1010 };
+      return { start: 906, finish: 1008 };
     default:
-      return { start: 1, finish: 1010 };
+      return { start: 1, finish: 1008 };
   }
 };
