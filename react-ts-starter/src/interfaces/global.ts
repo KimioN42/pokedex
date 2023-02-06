@@ -1,9 +1,3 @@
-export interface BtnProps {
-  name: string;
-  style: any;
-  handleClick: () => void;
-}
-
 export interface StepperProps {
   activeStep: number;
   setActiveStep: (step: number | any) => void;

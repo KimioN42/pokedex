@@ -1,8 +1,8 @@
 import { Pokemon, userInfo } from "../interfaces/global";
 import { useState, useEffect } from "react";
-import HorizontalLinearStepper from "../components/MUI/MUI-Stepper";
+import HorizontalLinearStepper from "../components/HorizontalStepper";
 import { StepperStyle } from "../utils/styling";
-import { ToastContainer } from "react-toastify";
+import { saveData } from "../utils/helper";
 
 function Home() {
   const [user, setUser] = useState<userInfo>({
@@ -30,6 +30,10 @@ function Home() {
     if (step) {
       setStep(parseInt(step));
     }
+    const validation = localStorage.getItem("validation");
+    if (validation) {
+      setFormValidated(JSON.parse(validation));
+    }
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,6 +46,7 @@ function Home() {
   const resetForm = () => {
     if (formValidated === true) {
       setFormValidated(false);
+      saveData("validation", "false");
     } else {
       localStorage.clear();
       setUser({
@@ -68,18 +73,6 @@ function Home() {
           resetForm={resetForm}
         />
       </div>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PokeCard from "../components/PokeCard";
 import { Pokemon, PokemonListProps } from "../interfaces/global";
+import axios from "axios";
 
 function Pokedex() {
   const [pokemon, setPokemon] = useState<Pokemon>();

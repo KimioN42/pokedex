@@ -4,8 +4,8 @@ import { formStyle } from "../utils/styling";
 import { saveData } from "../utils/helper";
 import { userInfo } from "../interfaces/global";
 import { FormProps } from "../interfaces/global";
-import { Alert, Box, Button, FormLabel, Input } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
+import { Box, Button, FormLabel, Input } from "@mui/material";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const UserForm = ({
@@ -48,7 +48,6 @@ const UserForm = ({
         progress: undefined,
         theme: "colored",
       });
-      return;
     } else {
       const userInfo: userInfo = {
         firstName: inputs[0].value,
@@ -58,6 +57,7 @@ const UserForm = ({
         address: inputs[4].value,
       };
       saveData("userInfo", JSON.stringify(userInfo));
+      saveData("validation", "true");
       console.log("User Info: ", userInfo);
       setValidation(true);
 

@@ -5,11 +5,10 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { StepperProps } from "../../interfaces/global";
-import UserForm from "../UserForm";
-import Pokedex from "../../pages/Pokedex";
+import { StepperProps } from "../interfaces/global";
+import UserForm from "./UserForm";
+import Pokedex from "../pages/Pokedex";
 import { Container } from "@mui/material";
-import { ToastContainer } from "react-toastify";
 
 const steps = ["Your Information", "Select your Pokemon", "Review"];
 
@@ -138,18 +137,6 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
           </Box>
         </React.Fragment>
       )}
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </Box>
   );
 }
