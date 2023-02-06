@@ -1,3 +1,4 @@
+import { Type } from "./requestInterfaces";
 export interface StepperProps {
   activeStep: number;
   setActiveStep: (step: number | any) => void;
@@ -35,4 +36,16 @@ export interface PokemonListProps {
 export interface Pokemon {
   name: string;
   url: string;
+}
+
+export interface PokeCardProps {
+  name: string;
+  url?: string;
+  image?: string;
+  types: Type[];
+}
+
+export interface generation {
+  start: number;
+  finish: number;
 }

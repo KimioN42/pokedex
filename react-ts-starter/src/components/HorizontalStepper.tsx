@@ -9,42 +9,25 @@ import { StepperProps } from "../interfaces/global";
 import UserForm from "./UserForm";
 import Pokedex from "../pages/Pokedex";
 import { Container } from "@mui/material";
+import { saveData } from "../utils/helper";
 
 const steps = ["Your Information", "Select your Pokemon", "Review"];
 
 export default function HorizontalLinearStepper(stepperProps: StepperProps) {
-  const [skipped, setSkipped] = React.useState(new Set<number>());
-
-  const isStepOptional = (step: number) => {
-    return false;
-  };
-
-  const isStepSkipped = (step: number) => {
-    return skipped.has(step);
-  };
-
   const handleNext = () => {
-    if (stepperProps.activeStep === 0) {
-      if (stepperProps.isValidForm) {
-        stepperProps.setActiveStep((prevActiveStep: any) => prevActiveStep + 1);
-      } else {
-        alert("Please fill out all fields");
-      }
+    //if form is not validated, alert user
+    if (stepperProps.activeStep === 0 && stepperProps.isValidForm === false) {
+      alert("Please fill out all fields");
       return;
     }
 
-    let newSkipped = skipped;
-    if (isStepSkipped(stepperProps.activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(stepperProps.activeStep);
-    }
-
     stepperProps.setActiveStep((prevActiveStep: any) => prevActiveStep + 1);
-    setSkipped(newSkipped);
+    saveData("step", (stepperProps.activeStep + 1).toString());
   };
 
   const handleBack = () => {
     stepperProps.setActiveStep((prevActiveStep: any) => prevActiveStep - 1);
+    saveData("step", (stepperProps.activeStep - 1).toString());
   };
 
   const handleReset = () => {
@@ -60,14 +43,6 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
           const labelProps: {
             optional?: React.ReactNode;
           } = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = (
-              <Typography variant="caption">Optional</Typography>
-            );
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
           return (
             <Step key={label} {...stepProps}>
               <StepLabel {...labelProps}>{label}</StepLabel>
