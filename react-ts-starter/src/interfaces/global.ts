@@ -40,7 +40,8 @@ export interface Pokemon {
 
 export interface PokeCardProps {
   pokeData: Data;
-  setPokemon: (pokemon: Data) => void;
+  setPokemon?: (pokemon: Data) => void;
+  setReview?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface generation {

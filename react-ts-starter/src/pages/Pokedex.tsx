@@ -9,6 +9,7 @@ import {
   Grid,
   LinearProgress,
   Typography,
+  Button,
 } from "@mui/material";
 import PokeGeneration from "../components/PokeGeneration";
 import { getPokemonGenerations } from "../utils/helper";
@@ -17,7 +18,13 @@ import { Data } from "../interfaces/requestInterfaces";
 import PokeFilter from "../components/PokeFilter";
 import { toast } from "react-toastify";
 
-function Pokedex() {
+type Props = {
+  setReview: React.Dispatch<React.SetStateAction<boolean>>;
+  handleNext: () => void;
+  handleBack: () => void;
+};
+
+function Pokedex(props: Props) {
   const [pokemon, setPokemon] = useState<Data>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -104,7 +111,11 @@ function Pokedex() {
               <Typography variant="h5" sx={{ marginRight: "1em" }}>
                 Your current Pokemon is:
               </Typography>
-              <PokeCard pokeData={pokemon as Data} setPokemon={setPokemon} />
+              <PokeCard
+                pokeData={pokemon as Data}
+                setPokemon={setPokemon}
+                setReview={props.setReview}
+              />
             </Box>
           </Box>
         </div>
@@ -158,6 +169,32 @@ function Pokedex() {
         <Typography style={error ? { display: "block" } : { display: "none" }}>
           There was an error loading the data. Please try again later.
         </Typography>
+
+        <Box
+          marginBottom="2em"
+          marginTop="-2em"
+          sx={
+            pokemon === undefined
+              ? { display: "none" }
+              : { display: "flex", flexDirection: "row", pt: 1 }
+          }
+        >
+          <Button
+            variant="outlined"
+            color="inherit"
+            onClick={props.handleBack}
+            sx={{ mr: 1 }}
+          >
+            Back
+          </Button>
+
+          <Box sx={{ flex: "1 1 auto" }} />
+
+          <Button variant="outlined" onClick={props.handleNext}>
+            Finish
+          </Button>
+        </Box>
+
         <Grid container spacing={2} display={loading ? "none" : "flex"}>
           {typeFilter === "all"
             ? pokemonList.map((pokemon: any, key: any) => (
@@ -165,6 +202,7 @@ function Pokedex() {
                   <PokeCard
                     pokeData={pokemon.data as Data}
                     setPokemon={setPokemon}
+                    setReview={props.setReview}
                   />
                 </Grid>
               ))
@@ -173,6 +211,7 @@ function Pokedex() {
                   <PokeCard
                     pokeData={pokemon.data as Data}
                     setPokemon={setPokemon}
+                    setReview={props.setReview}
                   />
                 </Grid>
               ))}

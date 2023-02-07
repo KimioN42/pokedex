@@ -22,13 +22,16 @@ type ModalProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setPokemon: (pokemon: Data) => void;
   pokeData: Data;
+  setReview: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function PokeModal(props: ModalProps) {
   const handleChoice = () => {
     props.setPokemon(props.pokeData);
     props.setOpen(false);
+    props.setReview(true);
     saveData("pokemon", JSON.stringify(props.pokeData));
+    saveData("review", "true");
     toast.success("Pokemon added to your team!");
   };
 

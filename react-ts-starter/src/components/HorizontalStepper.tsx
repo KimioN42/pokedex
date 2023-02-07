@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -10,17 +10,26 @@ import UserForm from "./UserForm";
 import Pokedex from "../pages/Pokedex";
 import { Container } from "@mui/material";
 import { saveData } from "../utils/helper";
+import Review from "../pages/Review";
 
 const steps = ["Your Information", "Select your Pokemon", "Review"];
 
 export default function HorizontalLinearStepper(stepperProps: StepperProps) {
+  const [review, setReview] = useState(false);
+
+  // get review from local storage
+  useEffect(() => {
+    localStorage.getItem("review")
+      ? setReview(JSON.parse(localStorage.getItem("review") as string))
+      : setReview(false);
+  }, []);
+
   const handleNext = () => {
     //if form is not validated, alert user
     if (stepperProps.activeStep === 0 && stepperProps.isValidForm === false) {
       alert("Please fill out all fields");
       return;
     }
-
     stepperProps.setActiveStep((prevActiveStep: any) => prevActiveStep + 1);
     saveData("step", (stepperProps.activeStep + 1).toString());
   };
@@ -33,6 +42,7 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
   const handleReset = () => {
     stepperProps.setActiveStep(0);
     stepperProps?.resetForm();
+    localStorage.clear();
   };
 
   return (
@@ -52,8 +62,11 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
       </Stepper>
       {stepperProps.activeStep === steps.length ? (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you're finished
+          <Typography variant="h2" textAlign="center" sx={{ mt: 5, mb: 1 }}>
+            All steps completed - you're finished!
+          </Typography>
+          <Typography variant="h5" textAlign="center" sx={{ mt: 5, mb: 1 }}>
+            Feel free to reset and try again!
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
@@ -78,20 +91,28 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
           {/* Step 2 - Pokedex */}
           {stepperProps.activeStep === 1 && (
             <Container maxWidth="xl">
-              <Pokedex />
+              <Pokedex
+                setReview={setReview}
+                handleNext={handleNext}
+                handleBack={handleBack}
+              />
             </Container>
           )}
 
           {/* Step 3 - Review */}
           {stepperProps.activeStep === 2 && (
             <Container maxWidth="xl">
-              <Typography sx={{ mt: 2, mb: 1 }}>
-                Review your information and submit
-              </Typography>
+              <Review />
             </Container>
           )}
 
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          <Box
+            sx={
+              stepperProps.activeStep === 1
+                ? { display: "none" }
+                : { display: "flex", flexDirection: "row", pt: 2 }
+            }
+          >
             <Button
               color="inherit"
               disabled={stepperProps.activeStep === 0}
@@ -105,7 +126,11 @@ export default function HorizontalLinearStepper(stepperProps: StepperProps) {
 
             <Button
               onClick={handleNext}
-              disabled={stepperProps.isValidForm === false}
+              disabled={
+                (stepperProps.activeStep === 0 &&
+                  stepperProps.isValidForm === false) ||
+                (stepperProps.activeStep === 1 && review === false)
+              }
             >
               {stepperProps.activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>

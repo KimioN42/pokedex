@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import HorizontalLinearStepper from "../components/HorizontalStepper";
 import { StepperStyle } from "../utils/styling";
 import { saveData } from "../utils/helper";
+import { Typography } from "@mui/material";
 
 function Home() {
   const [user, setUser] = useState<userInfo>({
@@ -56,6 +57,9 @@ function Home() {
 
   return (
     <div>
+      <Typography textAlign="center" variant="h1" gutterBottom>
+        PokeForm!
+      </Typography>
       <div style={StepperStyle.stepper}>
         <HorizontalLinearStepper
           activeStep={step}

@@ -59,7 +59,8 @@ export default function PokeCard(props: PokeCardProps) {
         pokeData={props.pokeData}
         open={open}
         setOpen={setOpen}
-        setPokemon={props.setPokemon}
+        setPokemon={props.setPokemon!}
+        setReview={props.setReview!}
       />
     </div>
   );
