@@ -1,7 +1,6 @@
 import { userInfo } from "../interfaces/global";
 import { useState, useEffect } from "react";
 import HorizontalLinearStepper from "../components/HorizontalStepper";
-import { StepperStyle } from "../utils/styling";
 import { saveData } from "../utils/helper";
 import { Typography } from "@mui/material";
 
