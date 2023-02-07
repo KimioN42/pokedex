@@ -12,12 +12,7 @@ export default function PokeTypes(props: TypeProps) {
     <Box display="flex" flexDirection="row">
       {props.types.map((type, key) => (
         <div key={nanoid()} className={"type " + type.type.name}>
-          <Typography
-            gutterBottom
-            variant="caption"
-            component="div"
-            color="white"
-          >
+          <Typography variant="caption" component="div" color="white">
             {type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}
           </Typography>
         </div>
