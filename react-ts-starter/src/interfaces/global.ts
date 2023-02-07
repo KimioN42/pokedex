@@ -1,4 +1,4 @@
-import { Data, Type } from "./requestInterfaces";
+import { Data } from "./requestInterfaces";
 export interface StepperProps {
   activeStep: number;
   setActiveStep: (step: number | any) => void;

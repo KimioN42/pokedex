@@ -6,9 +6,7 @@ import {
   CardActions,
   CardMedia,
   Dialog,
-  Modal,
   Typography,
-  Container,
 } from "@mui/material";
 import React from "react";
 import { Data } from "../../interfaces/requestInterfaces";
