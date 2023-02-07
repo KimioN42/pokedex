@@ -56,11 +56,11 @@ function Home() {
   };
 
   return (
-    <div>
-      <Typography textAlign="center" variant="h1" gutterBottom>
+    <div style={{ margin: 0, padding: 0 }}>
+      <Typography component="div" align="center" variant="h2" gutterBottom>
         PokeForm!
       </Typography>
-      <div style={StepperStyle.stepper}>
+      <div style={{ margin: 20, marginBottom: 80 }}>
         <HorizontalLinearStepper
           activeStep={step}
           setActiveStep={setStep}

@@ -106,15 +106,8 @@ export const StepperStyle = {
     backgroundColor: "#FFF",
     color: "#333",
     borderRadius: "5px",
-    padding: "20px",
-    margin: "20px",
-  },
-  stepper__title: {
-    fontSize: "24px",
-    margin: "0",
-  },
-  stepper__content: {
-    fontSize: "18px",
-    margin: "0",
+    padding: "1em",
+    margin: "1em",
+    width: "90%",
   },
 };
