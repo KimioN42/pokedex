@@ -64,7 +64,7 @@ function Pokedex(props: Props) {
 
   //PokeFilter
   useEffect(() => {
-    pokemonFilter(typeFilter);
+    pokemonFilter(typeFilter, true);
     // setSearch("");
     console.log("Type Filter: ", typeFilter);
   }, [typeFilter]);
@@ -122,9 +122,12 @@ function Pokedex(props: Props) {
   const pokemonSearch = (name: string) => {
     var pokemons = [];
     if (name === "" && typeFilter === "all") {
+      setFilteredPokemon(pokemonList);
       return;
     } else if (name === "") {
-      setFilteredPokemon(typeFilter);
+      console.log("edge case");
+      setFilteredPokemon(pokemonList);
+      pokemonFilter(typeFilter, false);
     } else if (typeFilter !== "all") {
       for (var i in filteredPokemon) {
         if (filteredPokemon[i].data.name.includes(name.toLowerCase())) {
@@ -144,11 +147,13 @@ function Pokedex(props: Props) {
     }
   };
 
-  const pokemonFilter = (type: string) => {
+  const pokemonFilter = (type: string, notify?: boolean) => {
     var typedPokemon = [];
     if (type === "all") {
-      getPokemon(getPokemonGenerations(generation));
-      toast.info(`Showing all Pokemon from generation ${generation}`);
+      setFilteredPokemon(pokemonList);
+      if (notify) {
+        toast.info(`Showing all Pokemon from generation ${generation}`);
+      }
       return;
     }
     let count = 0;
@@ -161,13 +166,15 @@ function Pokedex(props: Props) {
         }
       }
     }
-    count > 0
-      ? toast.info(
-          `Found ${count} ${type} type Pokemon for generation ${generation}`
-        )
-      : toast.error(
-          `No ${type} type Pokemon found for generation ${generation}`
-        );
+    if (notify) {
+      count > 0
+        ? toast.info(
+            `Found ${count} ${type} type Pokemon for generation ${generation}`
+          )
+        : toast.error(
+            `No ${type} type Pokemon found for generation ${generation}`
+          );
+    }
     setFilteredPokemon(typedPokemon);
   };
 
