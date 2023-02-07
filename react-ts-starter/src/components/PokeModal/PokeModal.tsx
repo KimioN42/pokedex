@@ -31,6 +31,12 @@ export default function PokeModal(props: ModalProps) {
     saveData("pokemon", JSON.stringify(props.pokeData));
     saveData("review", "true");
     toast.success("Pokemon added to your team!");
+    // scroll to top of page
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
