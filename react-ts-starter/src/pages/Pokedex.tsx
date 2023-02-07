@@ -29,7 +29,7 @@ function Pokedex(props: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [pokemonList, setPokemonList] = useState<any>([]);
-  const [filteredPokemon, setFilteredPokemon] = useState<Data[]>([]);
+  const [filteredPokemon, setFilteredPokemon] = useState<any>([]);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [generation, setGeneration] = useState<number>(1);
@@ -44,18 +44,28 @@ function Pokedex(props: Props) {
   //Set Generation
   useEffect(() => {
     getPokemon(getPokemonGenerations(generation));
+    setSearch("");
+    setTypeFilter("all");
     console.log("Generation: ", generation);
   }, [generation]);
 
   //PokeSearch
   useEffect(() => {
     pokemonSearch(search);
-    console.log("Search: ", search);
+    console.log(
+      "Search: ",
+      search,
+      "| type filter: ",
+      typeFilter,
+      " | generation: ",
+      generation
+    );
   }, [search]);
 
   //PokeFilter
   useEffect(() => {
     pokemonFilter(typeFilter);
+    // setSearch("");
     console.log("Type Filter: ", typeFilter);
   }, [typeFilter]);
 
@@ -68,31 +78,17 @@ function Pokedex(props: Props) {
       .all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then((res) => {
         setPokemonList(res);
+        setFilteredPokemon(res);
         setLoading(false);
       })
       .catch((err) => {
+        console.log("error: ", err);
         setError(true);
         setLoading(false);
       });
   };
 
-  const pokemonSearch = (name: string) => {
-    var filteredPokemons = [];
-    if (name === "" && typeFilter === "all") {
-      getPokemon(getPokemonGenerations(generation));
-    } else if (name === "") {
-      pokemonFilter(typeFilter);
-    }
-    for (var i in pokemonList) {
-      if (pokemonList[i].data.name.includes(name.toLowerCase())) {
-        filteredPokemons.push(pokemonList[i]);
-      }
-    }
-
-    setPokemonList(filteredPokemons);
-  };
-
-  const displayPokemon = () => {
+  const displayMyPokemon = () => {
     if (pokemon) {
       return (
         <div>
@@ -123,6 +119,31 @@ function Pokedex(props: Props) {
     } else return <div></div>;
   };
 
+  const pokemonSearch = (name: string) => {
+    var pokemons = [];
+    if (name === "" && typeFilter === "all") {
+      return;
+    } else if (name === "") {
+      setFilteredPokemon(typeFilter);
+    } else if (typeFilter !== "all") {
+      for (var i in filteredPokemon) {
+        if (filteredPokemon[i].data.name.includes(name.toLowerCase())) {
+          pokemons.push(filteredPokemon[i]);
+        }
+      }
+      setFilteredPokemon(pokemons);
+      return;
+    } else {
+      for (var j in pokemonList) {
+        if (pokemonList[j].data.name.includes(name.toLowerCase())) {
+          pokemons.push(pokemonList[j]);
+        }
+      }
+
+      setFilteredPokemon(pokemons);
+    }
+  };
+
   const pokemonFilter = (type: string) => {
     var typedPokemon = [];
     if (type === "all") {
@@ -141,8 +162,12 @@ function Pokedex(props: Props) {
       }
     }
     count > 0
-      ? toast.info(`Found ${count} ${type} type Pokemon`)
-      : toast.error(`No ${type} type Pokemon found`);
+      ? toast.info(
+          `Found ${count} ${type} type Pokemon for generation ${generation}`
+        )
+      : toast.error(
+          `No ${type} type Pokemon found for generation ${generation}`
+        );
     setFilteredPokemon(typedPokemon);
   };
 
@@ -154,14 +179,14 @@ function Pokedex(props: Props) {
       >
         Pokedex - Choose your Pokemon!
       </Typography>
-      {displayPokemon()}
+      {displayMyPokemon()}
       <PokeSearch search={search} setSearch={setSearch} />
       <PokeGeneration
         generation={generation}
         setGeneration={setGeneration}
         setLoading={setLoading}
       />
-      <PokeFilter setFilter={setTypeFilter} />
+      <PokeFilter filterValue={typeFilter} setFilter={setTypeFilter} />
       <Container maxWidth="xl" sx={{ marginTop: "5em" }}>
         <LinearProgress
           sx={loading ? { display: "block" } : { display: "none" }}
@@ -196,7 +221,9 @@ function Pokedex(props: Props) {
         </Box>
 
         <Grid container spacing={2} display={loading ? "none" : "flex"}>
-          {typeFilter === "all"
+          {/* if there is no search or type filter, show all pokemonList
+              else, show filteredPokemon */}
+          {typeFilter === "all" && search === ""
             ? pokemonList.map((pokemon: any, key: any) => (
                 <Grid item key={key} xs={12} sm={6} md={4} lg={3} xl={2}>
                   <PokeCard

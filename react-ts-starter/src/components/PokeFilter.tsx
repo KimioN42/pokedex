@@ -2,6 +2,7 @@ import { MenuItem, Select, Typography } from "@mui/material";
 import React from "react";
 
 type FilterProps = {
+  filterValue: string;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
 };
 
@@ -13,7 +14,7 @@ export default function PokeFilter(props: FilterProps) {
       </Typography>
       <Select
         fullWidth
-        defaultValue="all"
+        value={props.filterValue}
         onChange={(e) => props.setFilter(e.target.value as string)}
       >
         <MenuItem value="all">All</MenuItem>

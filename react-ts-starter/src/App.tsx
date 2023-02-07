@@ -8,11 +8,11 @@ function App() {
       <AppRouter />
       <ToastContainer
         position="top-center"
-        autoClose={2000}
+        autoClose={1500}
         hideProgressBar={false}
         newestOnTop={true}
         closeOnClick
-        rtl={true}
+        rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
